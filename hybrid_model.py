@@ -1,9 +1,27 @@
 import numpy as np
-from hill_cipher import HillCipher
-from sdes import SDES
-from steganography import Steganography
 import json
 import os
+import tempfile
+import sys
+
+# Add current directory to path for imports
+if os.path.dirname(__file__) not in sys.path:
+    sys.path.append(os.path.dirname(__file__))
+
+try:
+    from hill_cipher import HillCipher
+    from sdes import SDES
+    from steganography import Steganography
+except ImportError as e:
+    print(f"Import error: {e}")
+    # Try alternative import paths
+    try:
+        import hill_cipher, sdes, steganography
+        HillCipher = hill_cipher.HillCipher
+        SDES = sdes.SDES
+        Steganography = steganography.Steganography
+    except ImportError:
+        raise ImportError("Could not import required modules")
 
 
 class HybridCryptoModel:
@@ -88,9 +106,10 @@ class HybridCryptoModel:
             
             # Create a sample image if none provided
             if image_path is None:
-                image_path = self.steganography.create_sample_image(
-                    width=1000, height=800, output_path="temp_cover_image.png"
-                )
+                with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
+                    image_path = self.steganography.create_sample_image(
+                        width=800, height=600, output_path=tmp_file.name
+                    )
                 print(f"   Created cover image: {image_path}")
             
             # Check if image can hold the message
@@ -100,8 +119,8 @@ class HybridCryptoModel:
             
             # Hide the SDES encrypted binary in the image
             if output_image_path is None:
-                base_name = os.path.splitext(image_path)[0]
-                output_image_path = f"{base_name}_hybrid_encrypted.png"
+                with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
+                    output_image_path = tmp_file.name
             
             stego_image_path, hidden_bits = self.steganography.hide_message(
                 image_path, sdes_encrypted_binary, output_image_path
@@ -257,6 +276,11 @@ class HybridCryptoModel:
 
 # Example usage and testing
 if __name__ == "__main__":
+    print("Hybrid Cryptographic Model Implementation")
+    print("Developed by: Murali V, Siddarth Gowtham, Kalaiyarasan")
+    print("Course: Cryptography and Network Security (Sem 7)")
+    print("-" * 60)
+    
     # Create hybrid system
     hybrid = HybridCryptoModel()
     

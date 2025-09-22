@@ -32,10 +32,16 @@ class Steganography:
     def hide_message(self, image_path, message, output_path=None):
         """Hide message in image using LSB steganography"""
         try:
-            # Load image
+            # Load image with size limit for Streamlit Cloud
             img = Image.open(image_path)
+            
+            # Limit image size to prevent memory issues
+            max_size = (2000, 2000)
+            if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
+                img.thumbnail(max_size, Image.Resampling.LANCZOS)
+            
             img = img.convert('RGB')  # Ensure RGB format
-            pixels = np.array(img)
+            pixels = np.array(img, dtype=np.uint8)
             
             # Add delimiter to message
             message_with_delimiter = message + self.delimiter
@@ -180,6 +186,11 @@ class Steganography:
 
 # Example usage and testing
 if __name__ == "__main__":
+    print("Image Steganography Implementation")
+    print("Developed by: Murali V, Siddarth Gowtham, Kalaiyarasan")
+    print("Course: Cryptography and Network Security (Sem 7)")
+    print("-" * 50)
+    
     stego = Steganography()
     
     # Create a sample image for testing

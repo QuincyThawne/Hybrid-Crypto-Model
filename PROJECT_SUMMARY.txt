@@ -119,8 +119,8 @@ The Hybrid Cryptographic System is ready for:
 • Security research
 • Interactive learning
 
-Created by: Murali V
-Course: Cryptography and Network Security
+Created by: Team - Murali V, Siddarth Gowtham, Kalaiyarasan
+Course: Cryptography and Network Security (Sem 7)
 Date: September 2025
 
 ================================================================

@@ -150,6 +150,11 @@ class HillCipher:
 
 # Example usage and testing
 if __name__ == "__main__":
+    print("Hill Cipher Implementation")
+    print("Developed by: Murali V, Siddarth Gowtham, Kalaiyarasan")
+    print("Course: Cryptography and Network Security (Sem 7)")
+    print("-" * 50)
+    
     hill = HillCipher()
     
     # Test with a known key matrix

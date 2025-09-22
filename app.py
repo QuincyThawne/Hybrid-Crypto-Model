@@ -1,18 +1,33 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from PIL import Image
 import io
 import json
 import base64
 import os
 import tempfile
+import sys
 
-# Import our custom modules
-from hill_cipher import HillCipher
-from sdes import SDES
-from steganography import Steganography
-from hybrid_model import HybridCryptoModel
+# Add current directory to Python path for imports
+if os.path.dirname(__file__) not in sys.path:
+    sys.path.append(os.path.dirname(__file__))
+
+try:
+    from PIL import Image
+except ImportError:
+    st.error("PIL/Pillow not available. Please install Pillow.")
+    st.stop()
+
+# Import our custom modules with error handling
+try:
+    from hill_cipher import HillCipher
+    from sdes import SDES
+    from steganography import Steganography
+    from hybrid_model import HybridCryptoModel
+except ImportError as e:
+    st.error(f"Failed to import custom modules: {e}")
+    st.info("Make sure all Python files are in the same directory.")
+    st.stop()
 
 
 def main():
@@ -27,6 +42,9 @@ def main():
     st.title("🔐 Hybrid Cryptographic System")
     st.markdown("""
     ### Hill Cipher + SDES + Steganography
+    
+    **Developed by:** Murali V, Siddarth Gowtham, Kalaiyarasan  
+    **Course:** Cryptography and Network Security (Sem 7)
     
     This application implements a hybrid cryptographic model that combines three security techniques:
     1. **Hill Cipher** - Classical cipher using matrix algebra
@@ -108,6 +126,39 @@ def home_tab():
     
     df = pd.DataFrame(features)
     st.table(df)
+    
+    # Team credits section
+    st.markdown("---")
+    st.subheader("👥 Development Team")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **🎯 Murali V**  
+        *Lead Developer*
+        - System Architecture
+        - Hill Cipher Implementation
+        - Project Coordination
+        """)
+    
+    with col2:
+        st.markdown("""
+        **💻 Siddarth Gowtham**  
+        *Algorithm Developer*
+        - SDES Implementation
+        - Testing Framework
+        - Performance Optimization
+        """)
+    
+    with col3:
+        st.markdown("""
+        **🎨 Kalaiyarasan**  
+        *UI/UX Developer*
+        - Interface Design
+        - Steganography Module
+        - User Experience
+        """)
 
 
 def hill_cipher_tab():
@@ -661,10 +712,14 @@ def about_tab():
     - **Libraries**: NumPy, Pillow, OpenCV
     - **Architecture**: Modular design with separate classes
     
-    ### 👨‍💻 Developer Information
+    ### � Development Team
     
-    **Created by**: Murali V  
-    **Course**: Cryptography and Network Security  
+    **Team Members:**
+    - **Murali V** - Lead Developer & System Architecture
+    - **Siddarth Gowtham** - Algorithm Implementation & Testing
+    - **Kalaiyarasan** - UI Design & Documentation
+    
+    **Course**: Cryptography and Network Security (Sem 7)  
     **Project Type**: Hybrid Cryptographic Model  
     **Technologies**: Python, Streamlit, NumPy, Pillow
     

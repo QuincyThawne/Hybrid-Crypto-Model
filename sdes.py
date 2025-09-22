@@ -220,6 +220,11 @@ class SDES:
 
 # Example usage and testing
 if __name__ == "__main__":
+    print("SDES (Simplified DES) Implementation")
+    print("Developed by: Murali V, Siddarth Gowtham, Kalaiyarasan")
+    print("Course: Cryptography and Network Security (Sem 7)")
+    print("-" * 50)
+    
     sdes = SDES()
     
     # Test with a known key

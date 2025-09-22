@@ -132,6 +132,8 @@ def demo_hybrid_crypto():
 def main():
     """Main demo function"""
     print("🔐 HYBRID CRYPTOGRAPHIC SYSTEM - QUICK DEMO")
+    print("Developed by: Murali V, Siddarth Gowtham, Kalaiyarasan")
+    print("Course: Cryptography and Network Security (Sem 7)")
     print("=" * 60)
     
     results = []

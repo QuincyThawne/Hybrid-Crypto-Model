@@ -187,9 +187,13 @@ The system includes comprehensive testing:
 - ⚠️ Steganography detectable by statistical analysis
 - ⚠️ Not intended for production security systems
 
-### 👨‍💻 Development Info
+### � Development Team
 
-**Developer**: Murali V  
+**Team Members:**
+- **Murali V** - Lead Developer & System Architecture
+- **Siddarth Gowtham** - Algorithm Implementation & Testing  
+- **Kalaiyarasan** - UI Design & Documentation
+
 **Course**: Cryptography and Network Security (Sem 7)  
 **Institution**: [Your College/University]  
 **Language**: Python 3.13  
