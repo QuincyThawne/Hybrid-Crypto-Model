@@ -392,14 +392,10 @@ def steganography_tab():
                         
                         st.success(f"Message hidden successfully! ({hidden_bits} bits)")
                         
-                        # Download button
+                        # Store image data in session for persistent download
                         with open(output_path, "rb") as f:
-                            st.download_button(
-                                "Download Stego Image",
-                                f.read(),
-                                "stego_image.png",
-                                "image/png"
-                            )
+                            st.session_state.stego_image_data = f.read()
+                        st.session_state.stego_success = True
                         
                         # Clean up
                         os.unlink(tmp_file.name)
@@ -453,6 +449,30 @@ def steganography_tab():
                         
                 except Exception as e:
                     st.error(f"Error: {str(e)}")
+    
+    # Persistent download section for steganography
+    if 'stego_success' in st.session_state and st.session_state.stego_success:
+        st.markdown("---")
+        st.subheader("📥 Download Steganographic Image")
+        st.info("Your message has been hidden successfully!")
+        
+        if 'stego_image_data' in st.session_state:
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.download_button(
+                    "📷 Download Steganographic Image",
+                    st.session_state.stego_image_data,
+                    "stego_image.png",
+                    "image/png",
+                    help="Download the image with your hidden message",
+                    key="persistent_stego_download"
+                )
+            with col2:
+                if st.button("🗑️ Clear", key="clear_stego"):
+                    for key in ['stego_success', 'stego_image_data']:
+                        if key in st.session_state:
+                            del st.session_state[key]
+                    st.rerun()
 
 
 def hybrid_model_tab():
@@ -539,28 +559,13 @@ def hybrid_model_tab():
                             st.subheader("🔑 Keys Used")
                             st.json(result['keys'])
                             
-                            # Download buttons
-                            col_a, col_b = st.columns(2)
-                            with col_a:
-                                with open(result['encrypted_image_path'], "rb") as f:
-                                    st.download_button(
-                                        "Download Encrypted Image",
-                                        f.read(),
-                                        "hybrid_encrypted.png",
-                                        "image/png"
-                                    )
-                            
-                            with col_b:
-                                keys_json = json.dumps(result['keys'], indent=2)
-                                st.download_button(
-                                    "Download Keys",
-                                    keys_json,
-                                    "hybrid_keys.json",
-                                    "application/json"
-                                )
-                            
-                            # Store for session
+                            # Store for session first
                             st.session_state.hybrid_result = result
+                            
+                            # Store image data and keys in session for download
+                            with open(result['encrypted_image_path'], "rb") as f:
+                                st.session_state.encrypted_image_data = f.read()
+                            st.session_state.keys_json = json.dumps(result['keys'], indent=2)
                             
                         else:
                             st.error(f"❌ Encryption failed: {result['error']}")
@@ -654,6 +659,43 @@ def hybrid_model_tab():
                         st.error(f"Error: {str(e)}")
                 else:
                     st.warning("Please provide encrypted image and keys")
+    
+    # Persistent download section - appears after encryption regardless of page refresh
+    if 'hybrid_result' in st.session_state and st.session_state.hybrid_result.get('success'):
+        st.markdown("---")
+        st.subheader("📥 Download Encrypted Files")
+        st.info("Your encryption was successful! Download your files below:")
+        
+        col_download1, col_download2 = st.columns(2)
+        
+        with col_download1:
+            if 'encrypted_image_data' in st.session_state:
+                st.download_button(
+                    "📱 Download Encrypted Image",
+                    st.session_state.encrypted_image_data,
+                    "hybrid_encrypted.png",
+                    "image/png",
+                    help="Download the steganographic image containing your encrypted data",
+                    key="persistent_image_download"
+                )
+        
+        with col_download2:
+            if 'keys_json' in st.session_state:
+                st.download_button(
+                    "🔑 Download Keys File",
+                    st.session_state.keys_json,
+                    "hybrid_keys.json",
+                    "application/json",
+                    help="Download the keys file needed for decryption",
+                    key="persistent_keys_download"
+                )
+        
+        # Add clear results button
+        if st.button("🗑️ Clear Results", help="Clear current results to start a new encryption"):
+            for key in ['hybrid_result', 'encrypted_image_data', 'keys_json']:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
 
 
 def about_tab():
